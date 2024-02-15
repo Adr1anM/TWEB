@@ -1,17 +1,20 @@
-import React from 'react';
+import React from "react";
+import { observer } from "mobx-react";
+import dataStore from "./DataStore";
+import "./AboutMe.css"; 
 
-function App() {
-  return (
-    <div className="App">
-      <ul>
-        <li>Nume: Melnic</li>
-        <li>Prenume: Adrian</li>
-        <li>Virsta : 20</li>
-        <li>Grupa: CR-221</li>
-        <li>Anul: 2</li>
-      </ul>
-    </div>
-  );
-}
+const AboutMe = observer(() => {
+    return (
+        <div className="about-me-container"> {}
+           
+            <div className="info-block"> {}
+                <h1>About Me</h1>
+                <p>Name: {dataStore.name}</p>
+                <p>Age: {dataStore.age}</p>
+                <p>Location: {dataStore.location}</p>
+            </div>
+        </div>
+    );
+});
 
-export default App;
+export default AboutMe;
