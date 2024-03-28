@@ -30,10 +30,9 @@ interface ModalFormProps {
   visible: boolean;
   onSubmit: (data: CardModel) => void;
   onCancel:() => void;
-  card : CardModel;
 }
 
-const ModalForm: React.FC<ModalFormProps> = ({ visible, onCancel ,onSubmit, card }) => {
+const ModalForm: React.FC<ModalFormProps> = ({ visible, onCancel ,onSubmit }) => {
   const [form] = Form.useForm();
 
  
@@ -41,6 +40,7 @@ const ModalForm: React.FC<ModalFormProps> = ({ visible, onCancel ,onSubmit, card
   const onFinish = (values: any) => {
     const data:CardModel = {
       data: {
+        nume : values.nume,
         prenume : values.prenume,
         descriere : values.descriere,
         dataNasterii : values.dataNasterii.toString(),
@@ -59,19 +59,28 @@ const ModalForm: React.FC<ModalFormProps> = ({ visible, onCancel ,onSubmit, card
     form.resetFields();
   },[onCancel])
 
+  const normalizeValue = (value : string) => {
+   
+    const filteredValue = value.replace(/[^a-zA-Z\s]/g, '');
+    return filteredValue;
+   };
 
 
   return (
     <Modal title="Add Card" open={visible} onCancel={onCancel} footer={null}>
         <Form form={form} {...formItemLayout} onFinish={onFinish} initialValues={{}}>
- 
 
-          <Form.Item label="Prenume" name="prenume" rules={[{ required: true, message: 'Please input your surname!' }]}>
+          <Form.Item label="Nume" name="nume" normalize={normalizeValue} rules={[{ required: true, message: 'Please input your surname!' }]}>
            <Input />
           </Form.Item>
 
-         <Form.Item label="Descriere" name="descriere" rules={[{ required: true, message: 'Please input a description!' }]}>
-            <Input.TextArea />
+
+          <Form.Item label="Prenume" name="prenume" normalize={normalizeValue} rules={[{ required: true, message: 'Please input your surname!' }]}>
+           <Input />
+          </Form.Item>
+
+         <Form.Item label="Descriere"  name="descriere"  rules={[{max:30, required: true, message: 'Please input a description!' } ]}>
+            <Input.TextArea  />
           </Form.Item>
 
            <Form.Item label="Data Nasterii" name="dataNasterii" rules={[{ required: true, message: 'Please select your date of birth!' }]}>
@@ -79,8 +88,8 @@ const ModalForm: React.FC<ModalFormProps> = ({ visible, onCancel ,onSubmit, card
            </Form.Item>
 
           <Form.Item label="Nr group" name="nrGroup" rules={[{ required: true, message: 'Please input your surname!' }]}>            
-           <InputNumber />
-           </Form.Item>
+           <InputNumber type='number'/>
+          </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
              <Button type="primary" htmlType="submit">
